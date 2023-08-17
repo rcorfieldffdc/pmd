@@ -31,6 +31,10 @@ public final class ASTFieldDeclarationStatements extends AbstractApexNode<FieldD
         return getFirstChildOfType(ASTModifierNode.class);
     }
 
+    public String getFieldName() {
+    	return children(ASTFieldDeclaration.class).first().getName();
+    }
+    
     public String getTypeName() {
         if (node.getTypeName() != null) {
             List<Identifier> names = node.getTypeName().getNames();
