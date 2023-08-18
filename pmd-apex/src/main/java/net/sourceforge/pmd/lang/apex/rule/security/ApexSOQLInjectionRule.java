@@ -4,7 +4,6 @@
 
 package net.sourceforge.pmd.lang.apex.rule.security;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,10 +50,10 @@ import net.sourceforge.pmd.lang.apex.rule.internal.Helper;
 public class ApexSOQLInjectionRule extends AbstractApexRule{
 	/** Variable types that cannot contain SOQL injection by their nature. For example an Integer has only numbers. */
     private static final Set<String> SAFE_VARIABLE_TYPES = 
-        Stream.of(
-            "double", "long", "decimal", "boolean", "id", "integer",
-            "sobjecttype", "schema.sobjecttype", "sobjectfield", "schema.sobjectfield"
-        ).collect(Collectors.toUnmodifiableSet());
+            Collections.unmodifiableSet(Stream.of(
+                "double", "long", "decimal", "boolean", "id", "integer",
+                "sobjecttype", "schema.sobjecttype", "sobjectfield", "schema.sobjectfield"
+            ).collect(Collectors.toSet()));
     
     /** 
      * Identify a collection type and pick out the collection and what is contained as groups.
