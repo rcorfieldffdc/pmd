@@ -68,7 +68,7 @@ class ASTUserClassTest extends ApexParserTestBase {
 
     @Test
     void testGetMemberFields() {
-    	ASTUserClass topLevel = (ASTUserClass) parse("public class OuterClass { private Integer foo; public Integer bar = 10; private static integer A_CONSTANT = 0;}");
+    	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { private Integer foo; public Integer bar = 10; private static integer A_CONSTANT = 0;}");
     	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getMemberFields();
     	assertEquals(2, members.count());
     	
@@ -81,7 +81,7 @@ class ASTUserClassTest extends ApexParserTestBase {
     
     @Test
     void testGetStaticFields() {
-    	ASTUserClass topLevel = (ASTUserClass) parse("public class OuterClass { private Integer foo; public static Integer bar = 10; private static final integer A_CONSTANT = 0;}");
+    	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { private Integer foo; public static Integer bar = 10; private static final integer A_CONSTANT = 0;}");
     	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFields();
     	assertEquals(2, members.count());
     	
@@ -91,4 +91,12 @@ class ASTUserClassTest extends ApexParserTestBase {
     	
     	assertArrayEquals(expectedNames, foundNames);    	
     }
+    
+    @Test
+    void testGetStaticFieldsIgnoresStaticBlocks() {
+    	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { static { Integer foo = 10; } }");
+    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFields();
+    	assertEquals(0, members.count());
+    }
+
 }

@@ -5,6 +5,7 @@
 package net.sourceforge.pmd.lang.apex.ast;
 
 import apex.jorje.semantic.ast.member.Method;
+import apex.jorje.semantic.symbol.member.method.InvocationType;
 
 public final class ASTMethod extends AbstractApexNode<Method> implements ApexQualifiableNode {
 
@@ -55,4 +56,8 @@ public final class ASTMethod extends AbstractApexNode<Method> implements ApexQua
     public int getArity() {
         return node.getMethodInfo().getParameterTypes().size();
     }
+
+	public boolean isStatic() {
+		return node.getMethodInfo().getInvocationType() == InvocationType.STATIC;
+	}
 }

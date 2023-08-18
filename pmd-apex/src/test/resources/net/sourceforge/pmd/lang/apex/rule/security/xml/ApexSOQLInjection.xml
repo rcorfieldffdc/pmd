@@ -562,6 +562,20 @@ public class Foo {
     </test-code>
 
     <test-code>
+        <description>A variable initialised from a literal becomes unsafe when mutated</description>
+        <expected-problems>1</expected-problems>
+        <code><![CDATA[
+public class Foo {
+    public void test1(String untrusted) {
+        String field1 = 'yo';
+        field1 = field1 + untrusted;
+        Database.countQuery('SELECT COUNT() FROM Account WHERE Name =' + field1);
+    }
+}
+        ]]></code>
+    </test-code>
+
+    <test-code>
         <description>SOQL with merged with field variable</description>
         <expected-problems>0</expected-problems>
         <code><![CDATA[
@@ -682,6 +696,20 @@ public class Foo {
 }
         ]]></code>
     </test-code>
+
+    <test-code>
+        <description>List&lt;Integer&gt; is safe in query</description>
+        <expected-problems>0</expected-problems>
+        <code><![CDATA[
+public class Foo {
+    public void test1(String objName, String lim) { // "limit" is a kw
+        List<Integer> nLimit = new List<Integer>();
+        List<SObject> res = Database.countQuery('Select Count() From ' + String.escapeSingleQuotes(objName) + ' LIMIT ' + nLimit);
+    }
+}
+        ]]></code>
+    </test-code>
+
 
     <test-code>
         <description>ID var decl is safe in query</description>

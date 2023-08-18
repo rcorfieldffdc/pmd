@@ -66,4 +66,14 @@ public final class ASTFieldDeclarationStatements extends AbstractApexNode<FieldD
 
         return result;
     }
+
+
+    /**
+     * Return the expression that gives the initial value, or null if no initial value is provided.
+     * @return an Expression of some kind, for example {@link ASTBinaryExpression} or {@link ASTLiteralExpression}, or null
+     */
+	public ApexNode<?> getInitialValueExpression() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not Yet Implemented");
+	}
 }

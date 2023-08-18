@@ -20,4 +20,25 @@ class ASTMethodTest extends ApexParserTestBase {
         assertEquals("<init>", methods.get(0).getCanonicalName());
         assertEquals("bar", methods.get(1).getImage()); // normal method
     }
+    
+    @Test
+    void testIsStaticGivenStaticMethodReturnsTrue() {
+    	ASTUserClass cls = (ASTUserClass) parse("public class Foo { public static void bar() {} }");
+    	ASTMethod method = cls.children(ASTMethod.class).first();
+    	assertEquals(method.isStatic(), true);
+    }
+    
+    @Test
+    void testIsStaticGivenMemberMethodReturnsFalse() {
+    	ASTUserClass cls = (ASTUserClass) parse("public class Foo { public void bar() {} }");
+    	ASTMethod method = cls.children(ASTMethod.class).first();
+    	assertEquals(method.isStatic(), false);
+    }
+
+    @Test
+    void testIsStaticGivenStaticInitialiserReturnsTrue() {
+    	ASTUserClass cls = (ASTUserClass) parse("public class Foo { static {} }");
+    	ASTMethod method = cls.children(ASTMethod.class).first();
+    	assertEquals(method.isStatic(), true);
+    }
 }
