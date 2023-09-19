@@ -22,6 +22,14 @@ public final class ASTFieldDeclaration extends AbstractApexNode<FieldDeclaration
     public String getImage() {
         return getName();
     }
+    
+    /**
+     * Return the expression that gives the initial value, or null if no initial value is provided.
+     * @return an Expression of some kind, for example {@link ASTBinaryExpression} or {@link ASTLiteralExpression}, or null
+     */
+    public ApexNode<?> getInitialValueExpression() {
+        return this.getNumChildren() == 2 ? getFirstChild() : null;
+    }
 
     public String getName() {
         if (node.getFieldInfo() != null) {

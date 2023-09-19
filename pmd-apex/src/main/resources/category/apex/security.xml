@@ -220,7 +220,7 @@ public without sharing class Foo {
           language="apex"
           since="5.5.3"
           message="Avoid untrusted/unescaped variables in DML query"
-          class="net.sourceforge.pmd.lang.apex.rule.security.ApexSOQLInjectionRule"
+          class="net.sourceforge.pmd.lang.apex.rule.security.soqlInjection.ApexSOQLInjectionRule"
           externalInfoUrl="${pmd.website.baseurl}/pmd_rules_apex_security.html#apexsoqlinjection">
         <description>
 Detects the usage of untrusted / unescaped variables in DML queries.

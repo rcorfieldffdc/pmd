@@ -11,7 +11,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -69,11 +72,11 @@ class ASTUserClassTest extends ApexParserTestBase {
     @Test
     void testGetMemberFields() {
     	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { private Integer foo; public Integer bar = 10; private static integer A_CONSTANT = 0;}");
-    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getMemberFields();
+    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getMemberFieldDeclarationStatements();
     	assertEquals(2, members.count());
     	
     	Object[] expectedNames = {"bar","foo"};
-    	Object[] foundNames = members.toStream().map((ASTFieldDeclarationStatements x) -> x.getFieldName()).collect(Collectors.toList()).toArray();
+    	Object[] foundNames = members.toStream().flatMap(getFieldNames()).collect(Collectors.toList()).toArray();
     	Arrays.sort(foundNames);
     	
     	assertArrayEquals(expectedNames, foundNames);
@@ -82,20 +85,26 @@ class ASTUserClassTest extends ApexParserTestBase {
     @Test
     void testGetStaticFields() {
     	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { private Integer foo; public static Integer bar = 10; private static final integer A_CONSTANT = 0;}");
-    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFields();
+    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFieldDeclarationStatements();
     	assertEquals(2, members.count());
     	
     	Object[] expectedNames = {"A_CONSTANT","bar"};
-    	Object[] foundNames = members.toStream().map((ASTFieldDeclarationStatements x) -> x.getFieldName()).collect(Collectors.toList()).toArray();
+    	Object[] foundNames = members.toStream().flatMap(getFieldNames()).collect(Collectors.toList()).toArray();
     	Arrays.sort(foundNames);
     	
     	assertArrayEquals(expectedNames, foundNames);    	
     }
     
+    private Function<ASTFieldDeclarationStatements, ? extends Stream<String>> getFieldNames() {
+        return (ASTFieldDeclarationStatements s) -> s.children(ASTFieldDeclaration.class).toStream().map(
+                (ASTFieldDeclaration f) -> { return f.getName(); }
+                );
+    }
+    
     @Test
     void testGetStaticFieldsIgnoresStaticBlocks() {
     	ASTUserClass topLevel = (ASTUserClass) parse("public class SomeClass { static { Integer foo = 10; } }");
-    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFields();
+    	NodeStream<ASTFieldDeclarationStatements> members = topLevel.getStaticFieldDeclarationStatements();
     	assertEquals(0, members.count());
     }
 

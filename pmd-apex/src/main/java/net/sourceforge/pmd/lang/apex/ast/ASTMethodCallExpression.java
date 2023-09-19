@@ -4,6 +4,9 @@
 
 package net.sourceforge.pmd.lang.apex.ast;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import net.sourceforge.pmd.lang.document.TextRegion;
@@ -23,6 +26,13 @@ public final class ASTMethodCallExpression extends AbstractApexNode<MethodCallEx
         return visitor.visit(this, data);
     }
 
+    public String getReferenceName() {
+        List<Identifier> identifiers = node.getReferenceContext().getNames();
+        return identifiers.stream()
+                .map((Identifier i) -> i.getValue())
+                .collect(Collectors.joining("."));
+    }
+
     public String getMethodName() {
         return node.getMethodName();
     }
@@ -35,7 +45,7 @@ public final class ASTMethodCallExpression extends AbstractApexNode<MethodCallEx
         }
         return typeName.toString() + methodName;
     }
-
+    
     public int getInputParametersSize() {
         return node.getInputParameters().size();
     }

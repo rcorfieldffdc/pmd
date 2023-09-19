@@ -73,7 +73,7 @@ public final class ASTUserClass extends BaseApexClass<UserClass> implements ASTU
      * The member field's initialising {@link ASTFieldDeclarationStatements} are returned. 
      * From this it is possible to determine their modifiers and initial values.
      */
-    public NodeStream<ASTFieldDeclarationStatements> getMemberFields() {
+    public NodeStream<ASTFieldDeclarationStatements> getMemberFieldDeclarationStatements() {
     	return children(ASTFieldDeclarationStatements.class);
     }
     	
@@ -82,7 +82,7 @@ public final class ASTUserClass extends BaseApexClass<UserClass> implements ASTU
      * The static field's initialising {@link ASTFieldDeclarationStatements} are returned. 
      * From this it is possible to determine their modifiers and initial values.
      */
-    public NodeStream<ASTFieldDeclarationStatements> getStaticFields() {
+    public NodeStream<ASTFieldDeclarationStatements> getStaticFieldDeclarationStatements() {
     	return children(ASTMethod.class)
     		.filter((ASTMethod m) -> m.isSynthetic() && m.getImage().equals("<clinit>"))
     		.flatMap((ASTMethod m) -> m.children(ASTFieldDeclarationStatements.class));
